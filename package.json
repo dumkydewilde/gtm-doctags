@@ -1,0 +1,19 @@
+{
+  "name": "gtm-doctags",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gtm-to-markdown.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx functions-framework --target=containerToMarkDown --signature-type=event"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^5.14.4",
+    "googleapis": "^88.2.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^1.9.0"
+  }
+}

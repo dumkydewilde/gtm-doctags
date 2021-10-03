@@ -1,0 +1,4 @@
+- [Home](/)
+- [Tags](/tag/)
+- [Triggers](/trigger/)
+- [Variables](/variable/)
