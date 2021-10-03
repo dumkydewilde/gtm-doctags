@@ -12,7 +12,7 @@ Want to see a live demo? Have a look at [docs.dumky.net](http://docs.dumky.net)!
 4. To give the cloud function access to your GTM container you'll have to go to the IAM page and grab the email address from the app engine service account (or create your own service account). You might also have to enable the Google Tag Manager API in your newly created GCP Project at the [GCP marketplace](https://console.cloud.google.com/marketplace/product/google/tagmanager.googleapis.com).
 5. Run your Cloud Function, and voila, you can click the public link for the `index.html` in your storage bucket and see the black magic of Docsify in action.
 
-?> If you're playing around with static hosting on GCP Cloud Storage you might want to set `index.html` as the default page by clicking the three dots after your bucket in the bucket browser and clicking `Edit website configuration`. To see your changes appear live, you may also want to set the `cache-control` in the metadata of the `index.html` file (and other files) to something like `max-age=60` (i.e. one minute) instead of the default `max-age=3600`. 
+> :point_right: If you're playing around with static hosting on GCP Cloud Storage you might want to set `index.html` as the default page by clicking the three dots after your bucket in the bucket browser and clicking `Edit website configuration`. To see your changes appear live, you may also want to set the `cache-control` in the metadata of the `index.html` file (and other files) to something like `max-age=60` (i.e. one minute) instead of the default `max-age=3600`. 
 
 ## References
 - [Google Tag Manager API](https://developers.google.com/tag-manager/api/v2)
