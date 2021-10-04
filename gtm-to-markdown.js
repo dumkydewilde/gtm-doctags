@@ -138,6 +138,19 @@ const getVariableList = (containerVersion, workspaces) => {
     });
 }
 
+const getVersionsListMarkdown = (versionHeaders) => {
+    console.log(versionHeaders);
+
+    const tableHeader = "## Versions\n\n" +
+                        "| Version ID | name                      | Tags | Triggers | Variables | CustomTemplates | Zones |\n" +
+                        "|------------|---------------------------|------|----------|-----------|-----------------|-------|\n";
+
+    return tableHeader + versionHeaders.map(v => {
+        return `|[${v.containerVersionId}](https://tagmanager.google.com/#/versions/accounts/${ACCOUNT_ID}/containers/${CONTAINER_ID}/versions/${v.containerVersionId})` + 
+            `|${v.name}|${v.numTags}|${v.numTriggers}|${v.numVariables}|${v.numCustomTemplates}|${v.numZones}|`
+    }).join("\n")
+}
+
 exports.containerToMarkDown = async(event, context) => {
     try {
         // Set up authentication (don't forget to add your service account to the GTM container)
@@ -200,16 +213,26 @@ exports.containerToMarkDown = async(event, context) => {
      // Create MD file for variables and save to storage
      const variableList = getVariableList(containerVersionInfo.data, workspaces.data);
      const variableMD = variableList.map(t => {
-         return `\n## ${t.name} :id=variable-${t.id}
-\n*<span class="variable-type ${t.type}">${t.type}</span>* ${t.folder} <span class="edit variable link"><a href="${t.link}">edit variable</a></span>
-\n${t.notes}\n` +
-(t.type === "jsm" ? ("#### JS Content\n\n```javascript\n" + t.content + "\n```\n") : "") +
-(t.type !== "jsm" && t.content !== undefined ? ("#### Value\n`" + t.content + "`\n") : "")
-     }).join("")
+        return `\n## ${t.name} :id=variable-${t.id}` + 
+            `\n*<span class="variable-type ${t.type}">${t.type}</span>* ${t.folder} <span class="edit variable link"><a href="${t.link}">edit variable</a></span>` +
+            `\n${t.notes}\n` +
+            (t.type === "jsm" ? ("#### JS Content\n\n```javascript\n" + t.content + "\n```\n") : "") +
+            (t.type !== "jsm" && t.content !== undefined ? ("#### Value\n`" + t.content + "`\n") : "")
+        }).join("")
      
      await storage.bucket(STORAGE_BUCKET).file('variable/README.md').save(variableMD, (err) => {
          (err && console.error(err)) || console.log('succesfully uploaded variables file');
      });
+
+
+     // Create file with versions table
+     const versionHeaders = await tagmanager.accounts.containers.version_headers.list({
+         parent: CONTAINER_PATH
+     })
+    const versionsListMD = getVersionsListMarkdown(versionHeaders.data.containerVersionHeader);        
+    await storage.bucket(STORAGE_BUCKET).file('versions.md').save(versionsListMD, (err) => {
+        (err && console.error(err)) || console.log('succesfully uploaded versions file');
+    });
 
     } catch(e) {
         console.error(e);
