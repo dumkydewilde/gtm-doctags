@@ -139,8 +139,6 @@ const getVariableList = (containerVersion, workspaces) => {
 }
 
 const getVersionsListMarkdown = (versionHeaders) => {
-    console.log(versionHeaders);
-
     const tableHeader = "## Versions\n\n" +
                         "| Version ID | name                      | Tags | Triggers | Variables | CustomTemplates | Zones |\n" +
                         "|------------|---------------------------|------|----------|-----------|-----------------|-------|\n";
@@ -187,8 +185,6 @@ exports.containerToMarkDown = async(event, context) => {
 (t.filters != "" ? ("\n\n#### Filters\n`" + t.filters + "`") : "")
 + `\n\n#### Tags with this trigger \n${t.tags}\n`
         }).join("")
-        
-        console.log(triggerMD);
 
         await storage.bucket(STORAGE_BUCKET).file('trigger/README.md').save(triggerMD, (err) => {
             (err && console.error(err)) || console.log('succesfully uploaded trigger file');
